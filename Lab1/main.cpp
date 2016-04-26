@@ -131,15 +131,15 @@ int main()
     *                   and operator-=                   *
     ******************************************************/
     cout << "\nTEST PHASE 8: operator+=, operator*=, operator-=\n\n";
-/*
+
     S6 += S4;
-    S4 *= S4;
-    S1 -= S1;
+   // S4 *= S4;
+    //S1 -= S1;
 
     cout << "S6 = " << S6 << endl;
-    cout << "S4 = " << S4 << endl;
-    cout << "S1 = " << S1 << endl;
-*/
+   // cout << "S4 = " << S4 << endl;
+   // cout << "S1 = " << S1 << endl;
+
 
 
     /*****************************************************
@@ -147,14 +147,15 @@ int main()
     * Overloaded operators: union, intersection, and     *
     * and difference                                     *
     ******************************************************/
-    cout << "\nTEST PHASE 9: union, intersection, and difference\n\n";
+  /*  cout << "\nTEST PHASE 9: union, intersection, and difference\n\n";
+
 
     S1 = (S3 + S4);
     S2 = S3 * S4;
     S5 = S3 - S4;
 
     Set<int> S7(S3);
-    S6 = std::move(S7) + S5;
+  //  S6 = std::move(S7) + S5;
 
     cout << "S1 = " << S1 << endl;
     cout << "S2 = " << S2 << endl;
@@ -162,37 +163,37 @@ int main()
     cout << "S4 = " << S4 << endl;
     cout << "S5 = " << S5 << endl;
     cout << "S6 = " << S6 << endl;
-
+*/
     /*****************************************************
     * TEST PHASE 10                                       *
     * Overloaded operators: equality, subset, and        *
     * strict subset                                      *
     ******************************************************/
-    cout << "\nTEST PHASE 10: equality, subset, strict subset\n\n";
+ /*   cout << "\nTEST PHASE 10: equality, subset, strict subset\n\n";
 
     cout << "S4 == S1 ? " << (S4 == S1 ? 'T' : 'F') << endl;
     cout << "S4!== S1 ? " << (S4 != S1 ? 'T' : 'F') << endl;
     cout << "S4 <= S1 ? " << (S4 <= S1 ? 'T' : 'F') << endl;
     cout << "S4 <  S1 ? " << (S4 <  S1 ? 'T' : 'F') << endl;
-
+*/
     /*****************************************************
     * TEST PHASE 11                                       *
     * Overloaded operators: mixed-mode arithmetic        *
     ******************************************************/
-    cout << "\nTEST PHASE 11: mixed-mode arithmetic\n\n";
+/*    cout << "\nTEST PHASE 11: mixed-mode arithmetic\n\n";
 
     //Note: conversion constructor is called
     S2 = 4 + S3 - 5 - (S3+S4) - 99999;
     S5 = S4 - 2 + S2 + 24;
 
-    cout << "S2 = " << S2 << endl;
-    cout << "S5 = " << S5 << endl;
-
+   cout << "S2 = " << S2 << endl;
+   cout << "S5 = " << S5 << endl;
+*/
     /*****************************************************
     * TEST PHASE 12                                       *
     * Create a set of strings                            *
     ******************************************************/
-    cout << "\nTEST PHASE 12: Create a set of strings\n\n";
+/*    cout << "\nTEST PHASE 12: Create a set of strings\n\n";
 
     string AA[] = {"000", "001", "010", "011", "100"};
     Set<string> words(AA, 5);
@@ -208,5 +209,7 @@ int main()
 
 	cout << "Ending ...." << endl;
 
+
+*/
     return 0;
 }

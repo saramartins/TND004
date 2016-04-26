@@ -27,15 +27,15 @@ public:
     // and k is a a value of type T
 
     // Overloaded operators
-    Set operator+=(const Set &R) const;
-    Set operator*=(const Set &R) const;
-    Set operator-=(const Set &R) const;
+    Set operator+=(const Set &R);
+    Set operator*=(const Set &R);
+    Set operator-=(const Set &R);
 
     // Comparison operators
-    bool operator<=(const Set &R);
+    bool operator<=(const Set &R) const;
     bool operator<(const Set &R) const;
-    bool operator==(const Set &R);
-    bool operator!=(const Set &R); //returns true if R(S) has an element that does not belong to S(R)
+    bool operator==(const Set &R) const;
+    bool operator!=(const Set &R) const; //returns true if R(S) has an element that does not belong to S(R)
 
 private:
 
@@ -68,14 +68,14 @@ private:
         return os;
     }
 
-    friend Set operator+(const Set<T> &R1, const Set<T> &R2){
-        return R1._union(R2);
+    friend Set operator+( Set<T> &R1, const Set<T> &R2){
+        return (R1 += R2);
     }
     friend Set operator*(const Set<T> &R1, const Set<T> &R2) {
-        return R1;
+        return (R1 *= R2);
     }
     friend Set operator-(const Set<T> &R1, const Set<T> &R2){
-        return R1;
+        return (R1 -= R2);
     }
 
     int theSize;
@@ -86,8 +86,9 @@ private:
 
 public:
 
-    Set& _insert(const shared_ptr<Node>& p, T val);
-    Set _union(const Set &R) const;
+    Set& _insert(const shared_ptr<Node>& p, const T& val);
+
+    Set& _remove(const shared_ptr<Node>& p);
 
 };
 
@@ -190,45 +191,103 @@ Set<T>& Set<T>::operator=(Set &&R) noexcept{
 }
 
 // Overloaded operators
+// Not working! Union
 template<typename T>
-Set<T> Set<T>::operator+=(const Set &R) const{
+Set<T> Set<T>::operator+=(const Set &R) {
 
-    auto tmp = head->next;
-    auto S4 = R.head->next;
+    auto p1 = head->next;
+    auto p2 = R.head->next;
 
-    while(tmp != tail && S4 != tail)
+    while(p1 != tail && p2 != tail)
     {
-        cout <<"S4 data: "<< S4->data << endl;
-        cout <<"S6 data: " << tmp->data << endl;
-        if(tmp->data != S4->data)
-        {
-            cout << "I if sats" << endl;
-            tmp->next = S4;
+       if(p1->data < p2->data){
+            cout << p1->data << "<" << p2->data << endl;
+            p1 = p1->next;
 
-        }
-        tmp = tmp->next;
-        S4 = S4->next;
+       }
+       else if(p1->data > p2->data){
+            _insert(p1->prev, p2->data);
+             cout << p1->data << ">" << p2->data << endl;
+            p2 = p2->next;
+       }
+       else{
+        //lika
+        p1=p1->next;
+        p2=p2->next;
+       }
 
     }
+    while(p2!=tail){
+       // _insert(tail->prev, p2->data);
+        p2= p2->next;
+    }
+
 
     return *this;
 
 }
 
+
+//this one is working but we want to get rid of the Set c(*this) and only use this.
 template<typename T>
-Set<T> Set<T>::operator*=(const Set &R) const{
-    return false;
+Set<T> Set<T>::operator*=(const Set &R) {
+
+    Set c(*this);
+    auto p1 = head->next;
+
+    while(p1 != tail)
+    {
+        if(!R.is_member(p1->data))
+        {
+            c._remove(p1);
+        }
+        p1 = p1->next;
+    }
+
+    return c;
 }
 
+// difference
+//this one is not working, we think we should do same as above but inverse
 template<typename T>
-Set<T> Set<T>::operator-=(const Set &R) const{
-    return false;
+Set<T> Set<T>::operator-=(const Set &R) {
+
+    cout << "HALOOO!";
+
+    auto p1 = head->next;
+
+    while(p1 != tail)
+    {
+        cout << "inne i while";
+
+        if(!R.is_member(p1->data))
+        {
+            cout << "is member: " << p1->data << endl;
+            //_remove(p1);
+        }
+
+        p1 = p1->next;
+        cout << "hej" <<endl;
+    }
+
+    return *this;
 }
 
     // Comparison operators
 template<typename T>
-bool Set<T>::operator<=(const Set &R){
-    return false;
+bool Set<T>::operator<=(const Set &R) const{
+
+    auto tmp = head->next;
+
+    while(tmp != tail)
+    {
+        if(!R.is_member(tmp->data)) // om tmp->data inte finns i R,
+            return false;
+
+        tmp = tmp->next;
+    }
+
+    return true;
 }
 
 template<typename T>
@@ -237,19 +296,45 @@ bool Set<T>::operator<(const Set &R) const{
 }
 
 template<typename T>
-bool Set<T>::operator==(const Set &R){
-    return false;
+bool Set<T>::operator==(const Set &R) const{
+
+    auto tmp = head->next;
+    auto S = R.head->next;
+
+    while(tmp != tail)
+    {
+        if( (tmp->data <= S->data) && (S->data <= tmp->data) )
+            return true;
+        else
+            return false;
+
+            tmp = tmp->next;
+            S = S->next;
+    }
+
 }
 
 template<typename T> //returns true if R(S) has an element that does not belong to S(R)
-bool Set<T>::operator!=(const Set &R){
+bool Set<T>::operator!=(const Set &R) const{
     return false;
 }
 
 /*********** MASSA FUNKTIONER ************/
 
+
 template<typename T>
-Set<T>& Set<T>::_insert(const shared_ptr<Node>& p, T val)
+Set<T>& Set<T>::_remove(const shared_ptr<Node>& p)
+{
+    p->prev->next = p->next;
+    p->next->prev = p->prev;
+    //p = nullptr;
+    counter--;
+
+    return *this;
+}
+
+template<typename T>
+Set<T>& Set<T>::_insert(const shared_ptr<Node>& p, const T& val)
 {
 
     auto newNode = make_shared<Node>(val, p, p->next);
@@ -322,54 +407,4 @@ void Set<T>::print(ostream& os) const
     os << "}" << endl;
 }
 
-template<typename T>
-Set<T> Set<T>::_union(const Set &R) const
-{
-    Set newSet;
-
-    shared_ptr<Node> set1 = head->next;
-    shared_ptr<Node> set2 = R.head->next;
-
-    while(set1 != tail && set2 != tail)
-    {
-        if(set1->data < set2->data)
-        {
-            cout << "s1 < s2" << endl;
-            newSet._insert(newSet.head, set1->data);
-            set1 = set1->next;
-        }
-        else if (set1->data > set2->data)
-        {
-             cout << "s1 > s2" << endl;
-            newSet._insert(newSet.head, set2->data);
-            set2 = set2->next;
-        }
-        else // om dom har samma värde
-        {
-             cout << "s1 = s2" << endl;
-            newSet._insert(newSet.head, set1->data);
-            set1 = set1->next;
-            set2 = set2->next;
-        }
-
-         cout << newSet.head->data << endl;
-    }
-
-    while(set1 && set1 != tail)
-    {
-         cout << "s1" << endl;
-        newSet._insert(newSet.head, set1->data);
-        set1 = set1->next;
-    }
-
-    while(set2 && set2 != tail)
-    {
-         cout << "s2" << endl;
-        newSet._insert(newSet.head, set2->data);
-        set2 = set2->next;
-    }
-
-    return newSet;
-
-}
 
