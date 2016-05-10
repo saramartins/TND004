@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1461662443 source:h:\year3\tnd004\tnd004\lab2\lab2\test.cpp
+	<iostream>
+	<string>
+	"hashTable.h"
+
+1461694238 h:\year3\tnd004\tnd004\lab2\lab2\hashtable.h
+	"Item.h"
+	<iostream>
+	<iomanip>
+
+1461662443 h:\year3\tnd004\tnd004\lab2\lab2\item.h
+	<iostream>
+	<iomanip>
+	<new>
+
